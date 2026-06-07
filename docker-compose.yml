@@ -1,0 +1,20 @@
+services:
+  api-dev:
+    container_name: api-dev
+    restart: unless-stopped
+    build:
+      target: dev
+      context: .
+    ports:
+      - "3000:3000"
+      - "9229:9229" # Puerto para depuración (Debugger)
+    volumes:
+      - ./src:/app/src # Sincronización en tiempo real para recarga en caliente
+    environment:
+      - NODE_ENV=development
+    command: pnpm run start:dev # Sobreescribimos el comando final para usar el modo observador
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "512m"
