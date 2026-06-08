@@ -6,6 +6,7 @@ import {
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { setupSwagger } from './core/setup/swagger.setup';
+import { ConfigService } from '@nestjs/config';
 import { ResponseInterceptor } from './core/interceptors/response.interceptor';
 import helmet from '@fastify/helmet';
 
@@ -36,8 +37,10 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   setupSwagger(app);
 
-  const port = process.env.PORT || 3000;
-  await app.listen(port, '0.0.0.0');
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>('PORT')!;
+
+  await app.listen({ port, host: '0.0.0.0' });
 
   console.log(`🚀 Application is running on: http://localhost:${port}/api`);
 }

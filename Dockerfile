@@ -1,30 +1,22 @@
-# --- Etapa 1: Base ---
 FROM node:22-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN apk update && apk add --no-cache dumb-init=1.2.5-r3 && corepack enable
 
-# --- Etapa 2: Dependencias ---
 FROM base AS dependencies
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
-# --- Etapa 3: Desarrollo (NUEVO TARGET PARA DOCKER COMPOSE) ---
 FROM base AS dev
 WORKDIR /app
-# Copiamos los node_modules INTACTOS (con todas las devDependencies)
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
-# No hay 'prune' aquí, por lo que el CLI de NestJS sobrevive.
 
-# --- Etapa 4: Construcción ---
 FROM dev AS build
 RUN pnpm run build
-# Aquí sí limpiamos para producción
 RUN pnpm prune --prod
 
-# --- Etapa 5: Producción ---
 FROM base AS production
 ENV NODE_ENV=production
 USER node
