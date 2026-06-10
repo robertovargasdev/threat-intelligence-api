@@ -225,4 +225,4 @@ Salida esperada:
 ```
 
 ## Documentación
-Para ver la documentación completa generada automáticamente, visita: http://localhost:3000/api/docs
+Para ver la documentación completa generada automáticamente, visita el endpoint: http://localhost:3000/api/docs
