@@ -105,7 +105,7 @@ export class CheckoutController {
 
 ### Paso 1: Clonar el repositorio
 ```bash
-git clone [https://github.com/TU_USUARIO/threat-intelligence-api.git](https://github.com/TU_USUARIO/threat-intelligence-api.git)
+git clone https://github.com/robertovargasdev/threat-intelligence-api.git
 cd threat-intelligence-api
 ```
 
